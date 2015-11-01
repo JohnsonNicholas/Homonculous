@@ -1,0 +1,88 @@
+﻿<Window x:Class="Homonculous.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Homonculous"
+        xmlns:SB118="clr-namespace:SB118_CrewHistoryApp"
+        xmlns:SB118E="clr-namespace:SB118_CrewHistoryApp.Enums"
+        mc:Ignorable="d"
+        Title="SB118 Crew History" Height="714" Width="936">
+    <Window.Resources>
+        <local:DateTimeToStardateConverter x:Key="DTSconverter" />
+        <local:YearToBrushConverter x:Key="YTBconverter" />
+    </Window.Resources>
+    <Grid>
+        <DockPanel Margin="0,0,0,0"  LastChildFill="True">
+            <Menu x:Name="menu" Height="20" DockPanel.Dock="Top" IsMainMenu="True">
+                <MenuItem Header="_File" />
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" Click="DisplayAbout" />
+                </MenuItem>
+            </Menu>
+            <TabControl x:Name="tabControl" HorizontalAlignment="Stretch">
+                <TabItem Header="History Tracker">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="200" />
+                            <RowDefinition Height="34" />
+                            <RowDefinition Height="17" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="82" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="63" />
+                            <ColumnDefinition Width="120" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" x:Name="label" Content="Intro Text" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" x:Name="txtHeader" />
+                        <Label Grid.Row="1" Grid.Column="0" x:Name="label1" Content="Ship Name" />
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtShipName" Margin="0,0,481,0" />
+                        <Label Grid.Row="1" Grid.Column="2"  x:Name="label2" Content="Pip Style" />
+                        <ComboBox Grid.Row="1" Grid.Column="3"  x:Name="cmbPipStyle">
+                            <ComboBoxItem IsSelected="True">RetroSlanted</ComboBoxItem>
+                            <ComboBoxItem>Slanted</ComboBoxItem>
+                            <ComboBoxItem>STO</ComboBoxItem>
+                            <ComboBoxItem>DS9</ComboBoxItem>
+                            <ComboBoxItem>TOS</ComboBoxItem>
+                            <ComboBoxItem>FI</ComboBoxItem>
+                            <ComboBoxItem>FC</ComboBoxItem>
+                        </ComboBox>
+                        <DataGrid x:Name="dataGrid" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False"
+                                  ItemsSource="{Binding historyListing}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="First Name" Binding="{Binding charFirstN}"/>
+                                <DataGridTextColumn Header="Last Name" Binding="{Binding charLastN}"/>
+                                <DataGridTemplateColumn Header="Join Date">
+                                    <DataGridTemplateColumn.CellStyle>
+                                        <Style TargetType="{x:Type ContentControl}">
+                                            <Setter Property="Background" Value="{Binding charJoinDate, Converter={StaticResource YTBconverter}}" />
+                                        </Style>
+                                    </DataGridTemplateColumn.CellStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ContentControl Content="{Binding charJoinDate}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <DatePicker IsTodayHighlighted="True" SelectedDate="{Binding Path=charJoinDate, Converter={StaticResource DTSconverter}, Mode=TwoWay}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Positions and Promotions" Visibility="Hidden">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+                <TabItem Header="Awards" Visibility="Hidden">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </Grid>
+</Window>
